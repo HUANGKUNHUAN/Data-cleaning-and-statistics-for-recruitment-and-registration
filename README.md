@@ -85,3 +85,42 @@ python validate.py sample_signups.csv
 Outputs `problems.csv`: one row per problematic signup, keeping the original
 columns plus `问题原因 / issues`, which lists every reason why the row failed.
 An optional second argument sets a different output path.
+
+### 3. Statistics & export
+
+Runs validation first, then reports statistics on the cleaned data:
+
+```bash
+python stats.py sample_signups.csv
+```
+
+- prints and exports `first_choice_summary.csv` — applicant count grouped by
+  `志愿1`;
+- prints how many people filled **both** `志愿1` and `志愿2`, and how many
+  filled **exactly one** (people who filled neither are also reported for
+  completeness);
+- exports the fully cleaned dataset as `cleaned.csv`.
+
+An optional second argument sets an output directory.
+
+## Output files
+
+| File | Meaning |
+|------|---------|
+| `problems.csv` | Problem list: every problematic row with all failure reasons. |
+| `first_choice_summary.csv` | Number of applicants per first choice. |
+| `cleaned.csv` | Clean dataset: rows that pass every validation rule. |
+
+These generated files are git-ignored; run the commands above to recreate them.
+
+## Project structure
+
+```
+signup-tool/
+├── overview.py          # PR1: load & overview
+├── validate.py          # PR2: validate & export problem list
+├── stats.py             # PR3: statistics & export cleaned data
+├── sample_signups.csv   # sample data with edge cases
+├── requirements.txt
+└── README.md
+```
