@@ -67,3 +67,21 @@ The file `sample_signups.csv` is a small sample included in the repo. It
 contains deliberately problematic rows (bad IDs, mismatched emails, duplicate
 IDs, fully duplicate rows, padded whitespace) so the tool can be tried without
 real data. Replace it with the real questionnaire export when needed.
+
+### 2. Validate & clean
+
+Checks each row against the rules and exports a problem list. The input file
+is never modified.
+
+- `学号` must be non-empty and digits only;
+- `邮箱` must be exactly `学号@smbu.edu.cn`;
+- every row whose `学号` appears more than once is flagged as a duplicate
+  signup (all occurrences, for manual review).
+
+```bash
+python validate.py sample_signups.csv
+```
+
+Outputs `problems.csv`: one row per problematic signup, keeping the original
+columns plus `问题原因 / issues`, which lists every reason why the row failed.
+An optional second argument sets a different output path.
