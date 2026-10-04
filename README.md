@@ -51,3 +51,19 @@ source .venv/bin/activate
 
 pip install -r requirements.txt
 ```
+
+## Usage
+
+### 1. Load & overview
+
+Prints how many rows the file contains, how many empty cells each column has,
+and whether there are fully duplicate rows.
+
+```bash
+python overview.py sample_signups.csv
+```
+
+The file `sample_signups.csv` is a small sample included in the repo. It
+contains deliberately problematic rows (bad IDs, mismatched emails, duplicate
+IDs, fully duplicate rows, padded whitespace) so the tool can be tried without
+real data. Replace it with the real questionnaire export when needed.
