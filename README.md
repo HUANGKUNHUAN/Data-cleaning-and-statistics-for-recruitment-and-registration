@@ -1,0 +1,53 @@
+# Association Signup CSV Tool
+
+A small command-line tool that processes the hundreds of signup forms exported
+by the registration questionnaire each year. The tool is built in three
+incremental steps, each delivered as a separate pull request:
+
+| PR | Requirement | Script |
+|----|-------------|--------|
+| 1 | Load & overview | `overview.py` |
+| 2 | Validate & clean | `validate.py` |
+| 3 | Statistics & export | `stats.py` |
+
+## Assumptions
+
+The questionnaire export was not fully specified, so the following assumptions
+are made. They are listed here on purpose per the task instructions.
+
+1. **CSV columns** are exactly: `姓名`, `学号`, `邮箱`, `志愿1`, `志愿2`,
+   `推荐人`. Leading/trailing spaces in headers and cells are stripped.
+2. **Encoding** is UTF-8 (a BOM is tolerated, `utf-8-sig`); if that fails,
+   GBK is tried as a fallback.
+3. **Student ID (`学号`)** must contain digits only (`0-9`). There is **no
+   fixed length** — 8-digit and 10-digit IDs both pass. IDs are read as text
+   so leading zeros are preserved.
+4. **Email (`邮箱`)** must be exactly `学号@smbu.edu.cn`, e.g. student
+   `20240101` must use `20240101@smbu.edu.cn`. The comparison is case
+   sensitive; any mismatch is treated as a typo.
+5. **Empty values** include blank cells and whitespace-only cells. Empty
+   `志愿2` / `推荐人` are normal (they are optional fields), not errors.
+6. **Duplicate student ID**: every row whose `学号` appears more than once is
+   sent to the problem list (including all occurrences), so the duplicates can
+   be reviewed manually. None of the rows are deleted automatically.
+7. **The input file is never modified.** The tool only reads it; every result
+   is written to a new file.
+8. **Cleaned data** means rows that pass all validation rules (valid ID,
+   matching email, not part of a duplicate ID).
+
+## Requirements
+
+- Python 3.8 or newer
+- pandas (see `requirements.txt`)
+
+## Installation
+
+```bash
+python -m venv .venv
+# Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+# macOS / Linux
+source .venv/bin/activate
+
+pip install -r requirements.txt
+```
